@@ -1,0 +1,45 @@
+{
+  "cookies": [
+    {
+      "sameSite": "Lax",
+      "name": "_ga",
+      "value": "GA1.1.1806179972.1646204739",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1709276738,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "sameSite": "Lax",
+      "name": "_gid",
+      "value": "GA1.1.1523408502.1646204739",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1646291138,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "sameSite": "Lax",
+      "name": "qpay-web/3.0_csrf-token-v2",
+      "value": "0c2f1c74f3cc95efb32bc03934e62f97",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": false,
+      "secure": false
+    },
+    {
+      "sameSite": "Lax",
+      "name": "qpay-web/3.0_auth-token-v2",
+      "value": "testTokenEU",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false
+    }
+  ],
+  "origins": []
+}
