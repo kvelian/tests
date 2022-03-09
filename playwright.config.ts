@@ -36,6 +36,7 @@ const config: PlaywrightTestConfig = {
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     viewport: { width: 1366, height: 768 },
+    //channel: 'chrome',
     browserName: 'chromium',
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
@@ -43,19 +44,10 @@ const config: PlaywrightTestConfig = {
     locale: 'ru-RU',
     trace: 'on-first-retry',
     video: 'on-first-retry',
-    launchOptions: {
-      ignoreDefaultArgs: true,
-      // args: [
-      //   '--remote-debugging-pipe',
-      //   '--headless',
-      // ],
-      executablePath:
-      // Chrome 91.0.4472.114 at time of creating this example
-          'C:/chrome-win/chrome.exe',
-
+    //launchOptions: {
      // slowMo: 100,
      // devtools: true
-    }
+    //}
    // storageState: 'storageState.json'
   },
 

@@ -7,8 +7,8 @@ test.beforeEach(async ({ page , context}) => {
     await page.goto('');
 });
 
-test.describe('Change', () => {
-    test('change fullname and phone', async ({page}) => {
+test.describe('Analytics', () => {
+    test('enable toggle Allow analytics', async ({page}) => {
         // Open analytics page in Navigation
         await page.click("#clickable-button-personalCabinet")
         await Promise.all([
