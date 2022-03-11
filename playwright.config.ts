@@ -37,7 +37,7 @@ const config: PlaywrightTestConfig = {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     viewport: { width: 1366, height: 768 },
     //channel: 'chrome',
-    browserName: 'chromium',
+    //browserName: 'firefox',
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
     baseURL: 'http://localhost:3000/transfers/online/',
@@ -52,7 +52,7 @@ const config: PlaywrightTestConfig = {
   },
 
   /* Configure projects for major browsers */
-  // projects: [
+  projects: [
   //   {
   //     name: 'chromium',
   //     use: {
@@ -81,12 +81,12 @@ const config: PlaywrightTestConfig = {
     //     ...devices['Pixel 5'],
     //   },
     // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: {
-    //     ...devices['iPhone 12'],
-    //   },
-    // },
+    {
+      name: 'Mobile Safari',
+      use: {
+        ...devices['iPhone 12'],
+      },
+    },
 
     /* Test against branded browsers. */
     // {
@@ -95,13 +95,13 @@ const config: PlaywrightTestConfig = {
     //     channel: 'msedge',
     //   },
     // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: {
-    //     channel: 'chrome',
-    //   },
-    // },
-  //],
+    {
+      name: 'Google Chrome',
+      use: {
+        channel: 'chrome',
+      },
+    },
+  ],
 
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
   // outputDir: 'test-results/',
