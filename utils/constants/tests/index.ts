@@ -1,2 +1,2 @@
 export * from './cookies/cookies';
-export * from './settings/settings'
+export * from './pathes/pathes'

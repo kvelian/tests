@@ -77,7 +77,8 @@ const BUTTON = {
   HISTORY: 'clickable-button-history',
   CHANGE: 'clickable-button-change',
   EDIT: 'clickable-button-edit',
-  RECEIVE_TRANSFER: 'clickable-button-receiveTransfer'
+  RECEIVE_TRANSFER: 'clickable-button-receiveTransfer',
+  BACK_TO_HOME: 'clickable-button-backToHome'
 };
 
 export default BUTTON;

@@ -128,14 +128,14 @@ const STATIC = {
     },
     RECEIVE: {
       STEPS: {
-        RECEIVE_SELECT: {
+        CREDITING_SELECT: {
           TRANSFER_ITEM: {
             $ID: 'static-container-pageReceiveOnCardStepsReceiveSelectTransferSelectTransferItem',
             SENDER: 'static-text-pageReceiveOnCardStepsReceiveSelectTransferSelectTransferItemSender',
             AMOUNT: 'static-text-pageReceiveOnCardStepsReceiveSelectTransferSelectTransferItemAmount'
           }
         },
-        RECEIVING_OPTIONS: {
+        CREDITING_OPTIONS: {
           RECEIVING_AMOUNT_AND_COMMISSION: {
             $ID: 'static-container-pageReceiveOnCardStepsReceivingOptionsAmountAndCommission',
             AMOUNT: 'static-text-pageReceiveOnCardStepsReceivingOptionsAmountAndCommissionAmount',
@@ -191,14 +191,14 @@ const STATIC = {
       }
     },
     CARDS: {
-      SAVED_CARDS_DESCRIPTION: 'static-text-pageCardsMyCardsDescription',
       SAVED_CARDS: {
-        $ID: 'static-container-pageCardsMyCardsSelect',
+        $ID: 'static-container-pageCardsMyCards',
+        DESCRIPTION: 'static-text-pageCardsMyCardsDescription',
         CARD_ITEM: REUSABLE.CARD_ITEM
       },
-      CREDITING_ONLY_CARDS_DESCRIPTION: 'static-text-pageCardsCreditingOnlyCardsDescription',
       CREDITING_ONLY_CARDS: {
-        $ID: 'static-container-creditingOnlyCardsSelect',
+        $ID: 'static-container-creditingOnlyCards',
+        DESCRIPTION: 'static-text-pageCardsCreditingOnlyCardsDescription',
         CARD_ITEM: REUSABLE.CARD_ITEM
       }
     },
