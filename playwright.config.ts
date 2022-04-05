@@ -44,10 +44,13 @@ const config: PlaywrightTestConfig = {
     locale: 'ru-RU',
     trace: 'on-first-retry',
     video: 'on-first-retry',
-    //launchOptions: {
-     // slowMo: 100,
-     // devtools: true
-    //}
+    launchOptions: {
+      // force GPU hardware acceleration
+      // (even in headless mode)
+      // slowMo: 100,
+      // devtools: true
+      args: ["--use-gl=egl"]
+    },
    // storageState: 'storageState.json'
   },
 

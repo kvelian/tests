@@ -8,7 +8,7 @@
     "baseUrl": "./",
     "paths": {
       "@constants/*": ["utils/constants/*"],
-      "@helpers/*": ["utils/helpers/*"]
+      "@helpers": ["utils/helpers"]
     }
   },
   "exclude": [

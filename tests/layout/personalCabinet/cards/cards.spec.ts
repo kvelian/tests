@@ -1,7 +1,9 @@
 import {test, Page, expect} from '@playwright/test';
-import {AUTH_TOKEN_COOKIE, COOKIE_VALUES, PATHES} from "@constants/tests";
+
+import {AUTH_TOKEN_COOKIE, COOKIE_VALUES} from "@constants/tests";
 import {IDS} from "@constants/ids";
-import {getById, getIdFormatted} from "@helpers/ids";
+
+import {getById, getIdFormatted, waitRequest, mockResponse, waitResponse} from "@helpers";
 
 test.beforeEach(async ({page, context}) => {
     context.addCookies([{name: AUTH_TOKEN_COOKIE, value: COOKIE_VALUES.AUTH_COOKIE_RU, url: "http://localhost:3000"}]);
@@ -17,7 +19,7 @@ test('Open Cards Page', async ({page}) => {
     // Open Cards Page in Navigation
     await getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.$ID).click()
     await Promise.all([
-        page.waitForRequest(req => req.url().includes('/api/cards?operationType=transfer') && req.method().includes('GET')),
+        waitRequest(page, '/api/cards?operationType=transfer', 'GET'),
         page.waitForNavigation(),
         getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.CARDS).click()
     ]);
@@ -36,7 +38,7 @@ test.describe('View cards on Cards Page', () => {
         getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.CARDS).click()
 
         // Get cards response
-        const response = await page.waitForResponse(response => response.url().includes('/api/cards?operationType=transfer') && response.status() === 200);
+        const response = await waitResponse(page, '/api/cards?operationType=transfer', 200)
         // @ts-ignore
         const cards: Card[] = await response.json()
 
@@ -67,12 +69,7 @@ test.describe('View cards on Cards Page', () => {
             "capabilities": ["debiting", "crediting"],
             "default": false
         }]
-        await page.route('**/api/cards?operationType=transfer', (route) =>
-            route.fulfill({
-                contentType: 'application/json',
-                body: JSON.stringify(cards)
-            })
-        )
+        await mockResponse(page, '/api/cards?operationType=transfer', cards)
 
         // Open project page
         await page.goto('');
@@ -110,12 +107,7 @@ test.describe('View cards on Cards Page', () => {
             "capabilities": ["crediting"],
             "default": false
         }]
-        await page.route('**/api/cards?operationType=transfer', (route) =>
-            route.fulfill({
-                contentType: 'application/json',
-                body: JSON.stringify(cards)
-            })
-        )
+        await mockResponse<Card[]>(page, '/api/cards?operationType=transfer', cards)
 
         // Open project page
         await page.goto('');
@@ -131,77 +123,7 @@ test.describe('View cards on Cards Page', () => {
             .toHaveText("Чтобы отправлять переводы с карты, введите её данные ещё раз при переводе")
         await expect(page.locator(`${getIdFormatted(IDS.STATIC.PAGE.CARDS.CREDITING_ONLY_CARDS.$ID)} ${getIdFormatted(IDS.STATIC.PAGE.CARDS.CREDITING_ONLY_CARDS.CARD_ITEM.$ID, cardPan)}`)).toBeVisible()
 
-        // Check crediting cards container
-        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.$ID)).toBeHidden()
-
         // Snapshot Cards Page
         expect(await page.locator('main').screenshot()).toMatchSnapshot(`OnlyCreditingCards-${browserName}.png`)
     })
-})
-
-test.describe('Delete card on Cards Page', () => {
-    test.beforeEach(async ({page, context}) => {
-        // Open Cards Page
-        await page.goto(PATHES.CARDS);
-
-        // Open delete card popup
-        await getById(page, IDS.CLICKABLE.BUTTON.CARD.DELETE, "3190").click()
-    });
-
-    test('Cancel delete card (3190)', async ({page}) => {
-        // @test-cases
-        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T116
-
-        // Cancel delete card
-        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CANCEL).click()
-
-        // Check card exist
-        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeVisible();
-    });
-
-    test('Close delete card (3190)', async ({page}) => {
-        // @test-cases
-        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T116
-
-        // Cancel delete card
-        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CLOSE).click()
-
-        // Check card exist
-        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeVisible();
-    });
-
-    test('Fail delete card (3190)', async ({page}) => {
-        // @test-cases
-        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T117
-
-        // Add route with request body modify
-        const error: ApiError = {code: 11, type: "error", message: "Delete card failed"}
-        await page.route('**/api/cards/10024120?operationType=transfer', (route) =>
-            route.fulfill({
-                status: 400,
-                contentType: 'application/json',
-                body: JSON.stringify(error)
-            })
-        )
-
-        // Try to delete card
-        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CONFIRM).click()
-
-        // Close error popup
-        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CLOSE).click()
-
-        // Check card exist
-        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeVisible();
-    });
-
-    test('Success delete card (3190)', async ({page}) => {
-        // @test-cases
-        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T115
-
-        // Try to delete card
-        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CONFIRM).click()
-
-        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeHidden({timeout: 1000})
-    });
-
 })
