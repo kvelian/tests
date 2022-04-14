@@ -20,7 +20,7 @@ const config: PlaywrightTestConfig = {
      * Maximum time expect() should wait for the condition to be met.
      * For example in `await expect(locator).toHaveText();`
      */
-    toMatchSnapshot: { threshold: 0.1 },
+    toMatchSnapshot: { threshold: 0.1, maxDiffPixelRatio: 0.0007},
     timeout: 5000
   },
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -35,8 +35,8 @@ const config: PlaywrightTestConfig = {
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    viewport: { width: 1366, height: 768 },
-    channel: 'chrome',
+    viewport: { width: 1366, height: 800 },
+    //channel: 'chrome',
     //browserName: 'chromium',
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
@@ -49,33 +49,36 @@ const config: PlaywrightTestConfig = {
       // (even in headless mode)
       // slowMo: 100,
       // devtools: true
-      args: ["--use-gl=egl"]
+      //args: ["--use-gl=egl"]
     },
    // storageState: 'storageState.json'
   },
 
   /* Configure projects for major browsers */
-  // projects: [
-  //   {
-  //     name: 'chromium',
-  //     use: {
-  //       ...devices['Desktop Chrome'],
-  //     }
-  //   },
-  //
-  //   {
-  //     name: 'firefox',
-  //     use: {
-  //       ...devices['Desktop Firefox'],
-  //     },
-  //   },
-  //
-  //   {
-  //     name: 'webkit',
-  //     use: {
-  //       ...devices['Desktop Safari'],
-  //     },
-  //   },
+  projects: [
+    {
+      name: 'chromium',
+      use: {
+        viewport: { width: 1366, height: 800 },
+        ...devices['Desktop Chrome'],
+      }
+    },
+
+    {
+      name: 'firefox',
+      use: {
+        viewport: { width: 1366, height: 800 },
+        ...devices['Desktop Firefox'],
+      },
+    },
+
+    {
+      name: 'webkit',
+      use: {
+        viewport: { width: 1366, height: 800 },
+        ...devices['Desktop Safari'],
+      },
+    }]
 
     /* Test against mobile viewports. */
     // {

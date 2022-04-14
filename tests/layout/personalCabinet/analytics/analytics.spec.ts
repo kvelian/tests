@@ -1,9 +1,9 @@
 import {test, Page, expect} from '@playwright/test';
 
-import {AUTH_TOKEN_COOKIE, COOKIE_VALUES} from "@constants/tests";
 import {IDS} from "@constants/ids";
 
-import {getById, mockResponse, waitRequest} from "@helpers";
+import {addAuthCookie, getById, mockResponse, waitRequest} from "@helpers";
+import {snapshot} from "../../../../utils/helpers/snapshot";
 
 type AllowAnalyticsParameters = {
     settings: {
@@ -34,31 +34,32 @@ const allowAnalyticsParameters: AllowAnalyticsParameters[] =
         }]
 
 test.beforeEach(async ({page, context}) => {
-    context.addCookies([{name: AUTH_TOKEN_COOKIE, value: COOKIE_VALUES.AUTH_COOKIE_EU, url: "http://localhost:3000"}]);
+    await addAuthCookie(context, true);
     await page.goto('');
 });
 
-test('Open Analytics Page', async ({page, browserName}) => {
+test('Analytics Page: Open', async ({page}) => {
+    // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T99
     // Open Personal Cabinet in Navigation
     await getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.$ID).click()
 
     //Open Analytics Page
     await Promise.all([
-        waitRequest(page, '/api/users/settings', 'GET'),
         page.waitForNavigation(),
+        waitRequest(page, '/api/users/settings', 'GET'),
         getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.ANALYTICS).click()
     ]);
 
     // Snapshot Analytics Page
-    expect(await page.locator('main').screenshot()).toMatchSnapshot(`AnalyticsPage-${browserName}.png`)
+    await snapshot(page, 'main', 'AnalyticsPage');
 })
 
-test.describe('Toggle on Analytics Page', () => {
+test.describe('Analytics Page: Toggle', () => {
     for (const value of allowAnalyticsParameters) {
         test(`Change toggle state in ${+value.settings.put.params["transfers.allowAnalytics"]}`, async ({page}) => {
             // @test-cases
-            // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T99
             // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T98
+            // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T97
             // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T96
 
 

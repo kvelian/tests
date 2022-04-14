@@ -35,3 +35,55 @@ interface ApiError {
     message: string;
     retryDelayEnd?: number;
 }
+
+interface UserProfileReqPatchParams {
+    lastName?: string;
+    firstName?: string;
+    middleName?: string;
+    email?: string;
+    birthDate?: string;
+    birthPlace?: Place;
+    registrationAddress?: Address;
+    identityCard?: IdentityCard;
+    identityNumber?: string;
+    citizenship?: Country;
+    residenceCountryIds?: string[];
+    politicallyExposed?: boolean;
+}
+
+interface Country {
+    id: string,
+    code: string,
+    name: string,
+    phoneInfo: PhoneInfo
+}
+
+interface Place {
+    country: Country;
+    city: string;
+}
+
+interface Address {
+    country: Country;
+    city: string;
+    line1: string;
+    line2?: string;
+    postalCode?: string;
+    referenceId?: string;
+}
+
+interface PhoneInfo {
+    prefix: string;
+    extendedPrefix?: string;
+    minLength: number;
+    maxLength: number;
+    format: string;
+}
+
+interface IdentityCard {
+    serialNumber?: string;
+    number: string;
+    issuer?: string;
+    issueDate?: string;
+    expiryDate?: string;
+}

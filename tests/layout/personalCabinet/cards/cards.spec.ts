@@ -1,15 +1,16 @@
 import {test, Page, expect} from '@playwright/test';
 
-import {AUTH_TOKEN_COOKIE, COOKIE_VALUES} from "@constants/tests";
 import {IDS} from "@constants/ids";
 
-import {getById, getIdFormatted, waitRequest, mockResponse, waitResponse} from "@helpers";
+import {getById, getIdFormatted, waitRequest, mockResponse, waitResponse, addAuthCookie} from "@helpers";
+import {snapshot} from "../../../../utils/helpers/snapshot";
+import {PATHES} from "@constants/tests";
 
-test.beforeEach(async ({page, context}) => {
-    context.addCookies([{name: AUTH_TOKEN_COOKIE, value: COOKIE_VALUES.AUTH_COOKIE_RU, url: "http://localhost:3000"}]);
+test.beforeEach(async ({context}) => {
+    await addAuthCookie(context)
 });
 
-test('Open Cards Page', async ({page}) => {
+test('Cards Page: Open', async ({page}) => {
     // @test-cases
     // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T108
 
@@ -23,10 +24,13 @@ test('Open Cards Page', async ({page}) => {
         page.waitForNavigation(),
         getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.CARDS).click()
     ]);
+
+    // Snapshot Cards Page
+    await snapshot(page, 'main', 'CardsPage');
 });
 
-test.describe('View cards on Cards Page', () => {
-    test('All cards', async ({page, browserName}) => {
+test.describe('Cards Page: View cards', () => {
+    test('All cards', async ({page}) => {
         // @test-cases
         // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T118
 
@@ -35,10 +39,12 @@ test.describe('View cards on Cards Page', () => {
 
         // Open Cards Page in Navigation
         await getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.$ID).click()
-        getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.CARDS).click()
 
         // Get cards response
-        const response = await waitResponse(page, '/api/cards?operationType=transfer', 200)
+        const [response] = await Promise.all([
+            waitResponse(page, '/api/cards?operationType=transfer', 200),
+            getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.PERSONAL_CABINET.CARDS).click()
+        ]);
         // @ts-ignore
         const cards: Card[] = await response.json()
 
@@ -49,12 +55,9 @@ test.describe('View cards on Cards Page', () => {
             await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.PAYMENT_SYSTEM, cardPan)).toHaveText(card.paymentSystem)
             await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.NUMBER, cardPan)).toHaveText(`•••• ${cardPan}`)
         }
-
-        // Snapshot Cards Page
-        expect(await page.locator('main').screenshot()).toMatchSnapshot(`AllCards-${browserName}.png`)
     })
 
-    test('Only card for send', async ({page, browserName}) => {
+    test('Only card for send', async ({page}) => {
         // @test-cases
         // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T107
 
@@ -88,11 +91,9 @@ test.describe('View cards on Cards Page', () => {
         // Check crediting cards container
         await expect(getById(page, IDS.STATIC.PAGE.CARDS.CREDITING_ONLY_CARDS.$ID)).toBeHidden()
 
-        // Snapshot Cards Page
-        expect(await page.locator('main').screenshot()).toMatchSnapshot(`OnlySendCards-${browserName}.png`)
     })
 
-    test('Only card for crediting', async ({page, browserName}) => {
+    test('Only card for crediting', async ({page}) => {
         // @test-cases
         // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T106
 
@@ -122,8 +123,74 @@ test.describe('View cards on Cards Page', () => {
         await expect(getById(page, IDS.STATIC.PAGE.CARDS.CREDITING_ONLY_CARDS.DESCRIPTION))
             .toHaveText("Чтобы отправлять переводы с карты, введите её данные ещё раз при переводе")
         await expect(page.locator(`${getIdFormatted(IDS.STATIC.PAGE.CARDS.CREDITING_ONLY_CARDS.$ID)} ${getIdFormatted(IDS.STATIC.PAGE.CARDS.CREDITING_ONLY_CARDS.CARD_ITEM.$ID, cardPan)}`)).toBeVisible()
-
-        // Snapshot Cards Page
-        expect(await page.locator('main').screenshot()).toMatchSnapshot(`OnlyCreditingCards-${browserName}.png`)
     })
+})
+
+test.describe('Cards Page: Delete card (3190)', () => {
+    test.beforeEach(async ({page, context}) => {
+        // Open Cards Page
+        await page.goto(PATHES.CARDS);
+
+        // Open delete card popup
+        await getById(page, IDS.CLICKABLE.BUTTON.CARD.DELETE, "3190").click()
+    });
+
+    test('Popup DeleteCard snapshot', async ({page}) => {
+        // Snapshot Popup DeleteCard
+        await snapshot(page, getIdFormatted(IDS.STATIC.POPUP.$ID), 'Popup DeleteCard');
+    });
+
+    test('Cancel', async ({page}) => {
+        // @test-cases
+        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T116
+
+        // Cancel delete card
+        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CANCEL).click()
+
+        // Check card exist
+        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeVisible();
+    });
+
+    test('Close', async ({page}) => {
+        // @test-cases
+        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T116
+
+        // Cancel delete card
+        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CLOSE).click()
+
+        // Check card exist
+        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeVisible();
+    });
+
+    test('Fail', async ({page}) => {
+        // @test-cases
+        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T117
+
+        // Add route with request body modify
+        const error: ApiError = {code: 11, type: "error", message: "Delete card failed"}
+        await mockResponse(page, '/api/cards/10024120?operationType=transfer', error, 400)
+
+        // Try to delete card
+        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CONFIRM).click()
+
+        // Close error popup
+        await getById(page, IDS.CLICKABLE.BUTTON.POPUP.CLOSE).click()
+
+        // Check card exist
+        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeVisible();
+    });
+
+    test('Success', async ({page}) => {
+        // @test-cases
+        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T115
+
+        // Try to delete card
+        await Promise.all([
+            waitRequest(page, '/api/cards/10024120?operationType=transfer', 'DELETE'),
+            getById(page, IDS.CLICKABLE.BUTTON.POPUP.CONFIRM).click()
+        ])
+
+        await expect(getById(page, IDS.STATIC.PAGE.CARDS.SAVED_CARDS.CARD_ITEM.$ID, "3190")).toBeHidden({timeout: 1000})
+    });
+
 })
