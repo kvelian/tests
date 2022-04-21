@@ -1,4 +1,4 @@
-import {test, Page, expect} from '@playwright/test';
+import {test} from '@playwright/test';
 
 import {IDS} from "@constants/ids";
 
@@ -76,7 +76,7 @@ test.describe('Analytics Page: Toggle', () => {
             // Enable AllowAnalytics toggle
             await Promise.all([
                 waitRequest<Settings>(page, '/api/users/settings', 'PUT', value.settings.put.params),
-                page.evaluate(id => (document.getElementById(id)).click(), IDS.CHANGEABLE.FIELD.TOGGLE.ALLOW_COLLECT_ANALYTICS)
+                page.evaluate(id => (document.getElementById(id)).click(), IDS.CHANGEABLE.FIELD.TOGGLE.ALLOW_ANALYTICS)
             ]);
 
             // Open sendCash page in navigation

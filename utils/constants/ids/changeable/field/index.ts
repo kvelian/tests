@@ -45,10 +45,10 @@ const FIELD = {
     CURRENCY: 'changeable-field-select-currency'
   },
   TOGGLE: {
-    ALWAYS_SEND_RECEIPT_TO_EMAIL: 'changeable-field-toggle-alwaysSendReceiptToEmail',
-    SEND_ADS: 'changeable-field-toggle-sendAds',
-    SEND_EMAIL_NOTIFICATIONS: 'changeable-field-toggle-sendEmailNotifications',
-    ALLOW_COLLECT_ANALYTICS: 'changeable-field-toggle-allowCollectAnalytics',
+    SEND_RECEIPT_TO_EMAIL: 'changeable-field-toggle-sendReceiptToEmail',
+    ALLOW_ADS: 'changeable-field-toggle-allowAds',
+    SEND_STATUS_CHANGES_TO_EMAIL: 'changeable-field-toggle-sendStatusChangesToEmail',
+    ALLOW_ANALYTICS: 'changeable-field-toggle-allowAnalytics',
     PAID_NOTIFICATION: 'changeable-field-toggle-paidNotification'
   },
   CHECKBOX: {
