@@ -1,13 +1,21 @@
 import {test} from "@playwright/test";
-import {getById, waitRequest} from "@helpers";
+import {clearInput, getById, waitRequest} from "@helpers";
 import {snapshot} from "../../utils/helpers/snapshot";
 import {IDS} from "@constants/ids";
 
 test.beforeEach(async ({page, context}) => {
     await page.goto('');
 });
-test.describe('Authorisation', () => {
-    test('Success Login', async ({page}) => {
+test.describe('Login Page: Authorisation', () => {
+    test('Login Page: Open', async ({page}) => {
+        // @test-case
+        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T104
+
+        // Open Login Page In Navigation
+        await getById(page, IDS.CLICKABLE.BUTTON.NAV_MENU.LOGIN).click()
+    }),
+
+    test('Login Page: Login', async ({page}) => {
         // @test-case
         // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T121
 
@@ -16,6 +24,9 @@ test.describe('Authorisation', () => {
 
         // Snapshot Login Page
         //await snapshot(page, 'main', 'LoginPage');
+
+        // Clear phone input
+        await clearInput(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE)
 
         // Input Phone
         await getById(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE).type('8005553535')
