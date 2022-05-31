@@ -9,7 +9,7 @@ test.beforeEach(async({page, context}) => {
     await page.goto(PATHES.HISTORY);
 });
 test.describe('Refund', () =>
-    test('Refund transfer 300001', async ({page}) => {
+    test('300001', async ({page}) => {
         // Тест-кейс: https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T16
 
         // Открыть перевод с id=300001
