@@ -63,19 +63,18 @@ const config: PlaywrightTestConfig = {
         ...devices['Desktop Chrome'],
       }
     },
+     {
+       name: 'firefox',
+       use: {
+         viewport: { width: 1366, height: 800 },
+         ...devices['Desktop Firefox'],
+       },
+     },
 
-    {
-      name: 'firefox',
-      use: {
-        viewport: { width: 1366, height: 800 },
-        ...devices['Desktop Firefox'],
-      },
-    },
-
-    {
-      name: 'webkit',
-      use: {
-        viewport: { width: 1366, height: 800 },
+     {
+       name: 'webkit',
+       use: {
+         viewport: { width: 1366, height: 800 },
         ...devices['Desktop Safari'],
       },
     }]
