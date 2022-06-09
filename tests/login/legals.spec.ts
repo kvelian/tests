@@ -52,6 +52,7 @@ for (const value of legals) {
         test.use({locale: value.locale});
         test(`check Service Agreement RUS ${value.locale}`, async ({page}) => {
             await clearInput(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE)
+            await getById(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE).type('78005553535')
             await expect(getById(page, IDS.STATIC.LAYOUT.LEGAL.SERVICE_AGREEMENT)).toHaveText(value.serviceAgreementRUS.text);
             await expect(page.locator(`#${IDS.STATIC.LAYOUT.LEGAL.SERVICE_AGREEMENT} ${value.serviceAgreementRUS.linkLocation}`))
                 .toHaveAttribute('href', 'https://api.koronapay.com/link-info/transfers/web/3.0.0/ru/offer');
@@ -59,15 +60,16 @@ for (const value of legals) {
         test(`check Privacy Policy EUR ${value.locale}`, async ({page}) => {
             // Filled EUR number in phone input
             await clearInput(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE)
-            await getById(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE).type('33899553355');
-
+            await getById(page, IDS.CHANGEABLE.FIELD.INPUT.PHONE).type('33899553355')
             await expect(getById(page, IDS.STATIC.LAYOUT.LEGAL.SERVICE_AGREEMENT)).toHaveText(value.privacyPolicyEUR.text);
             await expect(page.locator(`#${IDS.STATIC.LAYOUT.LEGAL.SERVICE_AGREEMENT} ${value.privacyPolicyEUR.linkLocation}`))
                 .toHaveAttribute('href', 'https://koronapay.eu/misc/en/documents/Privacy_Policy.pdf');
         });
 
-        // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T171
+
         test(`Check ReCaptcha text and URL ${value.locale}`, async ({page}) => {
+            // @test-case
+            // https://jira.ftc.ru/secure/Tests.jspa#/testCase/QWS-T171
             await expect(getById(page, IDS.STATIC.LAYOUT.LEGAL.RECAPTCHA)).toHaveText(value.recaptcha.text);
             await expect(page.locator(`#${IDS.STATIC.LAYOUT.LEGAL.RECAPTCHA} ${value.recaptcha.privacyLinkLocation}`))
                 .toHaveAttribute('href', 'https://policies.google.com/privacy');
