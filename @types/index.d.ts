@@ -87,3 +87,13 @@ interface IdentityCard {
     issueDate?: string;
     expiryDate?: string;
 }
+
+interface FaqTexts {
+    question: string;
+    answer: {
+        key: string;
+        value: string;
+        strict?: boolean;
+        nth?: number;
+    }[]
+}

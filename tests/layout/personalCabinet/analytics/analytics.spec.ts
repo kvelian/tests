@@ -2,8 +2,7 @@ import {test} from '@playwright/test';
 
 import {IDS} from "@constants/ids";
 
-import {addAuthCookie, getById, mockResponse, waitRequest} from "@helpers";
-import {snapshot} from "../../../../utils/helpers/snapshot";
+import {addAuthCookie, getById, mockResponse, waitRequest, snapshot} from "@helpers";
 
 type AllowAnalyticsParameters = {
     settings: {

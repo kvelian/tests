@@ -64,21 +64,22 @@ const config: PlaywrightTestConfig = {
       }
     },
 
-    {
-      name: 'firefox',
-      use: {
-        viewport: { width: 1366, height: 800 },
-        ...devices['Desktop Firefox'],
-      },
-    },
-
-    {
-      name: 'webkit',
-      use: {
-        viewport: { width: 1366, height: 800 },
-        ...devices['Desktop Safari'],
-      },
-    }]
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     viewport: { width: 1366, height: 800 },
+    //     ...devices['Desktop Firefox'],
+    //   },
+    // },
+    //
+    // {
+    //   name: 'webkit',
+    //   use: {
+    //     viewport: { width: 1366, height: 800 },
+    //     ...devices['Desktop Safari'],
+    //   },
+    // }
+    ]
 
     /* Test against mobile viewports. */
     // {

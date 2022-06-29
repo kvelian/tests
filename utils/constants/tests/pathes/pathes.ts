@@ -7,4 +7,5 @@ export const PATHES = {
     LOGIN: 'login/',
     MESSAGES: 'messages/',
     RECEIVE: 'receive/',
+    FAQ: 'faq/'
 }

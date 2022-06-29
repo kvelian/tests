@@ -2,8 +2,7 @@ import {test, Page, expect} from '@playwright/test';
 
 import {IDS} from "@constants/ids";
 
-import {getById, getIdFormatted, waitRequest, mockResponse, waitResponse, addAuthCookie} from "@helpers";
-import {snapshot} from "../../../../utils/helpers/snapshot";
+import {getById, getIdFormatted, waitRequest, mockResponse, waitResponse, addAuthCookie, snapshot} from "@helpers";
 import {PATHES} from "@constants/tests";
 
 test.beforeEach(async ({context}) => {

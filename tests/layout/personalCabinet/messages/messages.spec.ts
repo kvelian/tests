@@ -3,8 +3,7 @@ import {test, expect} from '@playwright/test';
 import {IDS} from "@constants/ids";
 import {VALIDATION_ERROR} from "@constants/tests";
 
-import {addAuthCookie, clearInput, getById, mockResponse, waitRequest} from "@helpers";
-import {snapshot} from "../../../../utils/helpers/snapshot";
+import {addAuthCookie, clearInput, getById, mockResponse, waitRequest, snapshot} from "@helpers";
 
 test.beforeEach(async ({page, context}) => {
     await addAuthCookie(context);
