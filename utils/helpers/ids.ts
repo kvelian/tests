@@ -1,5 +1,5 @@
-import type {Page} from "@playwright/test";
+import type {Page, Frame} from "@playwright/test";
 
 export const getIdFormatted = (id: string, option?: string) => !!option ? `#${id}-${option}` : `#${id}`
 
-export const getById = (page: Page, id: string, option?: string) => page.locator(getIdFormatted(id, option))
+export const getById = (page: Page | Frame, id: string, option?: string) => page.locator(getIdFormatted(id, option))
