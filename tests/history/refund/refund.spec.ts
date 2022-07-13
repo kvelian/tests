@@ -17,9 +17,9 @@ test.describe('Refund', () =>
 
         // Нажать на кнопку "Вернуть"
         await Promise.all([
-            getById(page, IDS.CLICKABLE.BUTTON.REFUND.INPLACE).click(),
             waitRequest(page, '/api/transfers/300001/refund-requests', "POST"),
-            waitRequest(page, '/api/transfers/300001/refund-requests/auth-codes', "POST")
+            waitRequest(page, '/api/transfers/300001/refund-requests/auth-codes', "POST"),
+            getById(page, IDS.CLICKABLE.BUTTON.REFUND.INPLACE).click()
         ])
 
         // Сделать скрин модального окна возврата
@@ -27,9 +27,9 @@ test.describe('Refund', () =>
 
         // Ввести отп и нажать кнопку "Вернуть"
         await Promise.all([
+            waitRequest(page, '/api/transfers/300001/refund-requests/confirmation', "POST"),
             getById(page, IDS.CHANGEABLE.FIELD.INPUT.OTP).type("666666"),
-            getById(page, IDS.CLICKABLE.BUTTON.REFUND.POPUP).click(),
-            waitRequest(page, '/api/transfers/300001/refund-requests/confirmation', "POST")
+            getById(page, IDS.CLICKABLE.BUTTON.REFUND.POPUP).click()
         ])
 
         // Сделать скрин попап успешного возврата

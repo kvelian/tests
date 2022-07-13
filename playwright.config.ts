@@ -42,7 +42,7 @@ const config: PlaywrightTestConfig = {
     ignoreHTTPSErrors: true,
     baseURL: 'http://localhost:3000/transfers/online/',
     locale: 'ru-RU',
-    trace: 'on-first-retry',
+    trace: 'on',
    //video: 'on-first-retry',
     launchOptions: {
       // force GPU hardware acceleration
